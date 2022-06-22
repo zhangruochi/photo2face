@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 ###
 # File: /data/zhangruochi/photo2face/photo2face.py
-# Project: /data/zhangruochi/photo2face
+# Project: /Users/ZRC
 # Created Date: Tuesday, June 21st 2022, 4:10:36 pm
 # Author: Ruochi Zhang
 # Email: zrc720@gmail.com
@@ -14,7 +14,7 @@
 # 
 # MIT License
 # 
-# Copyright (c) 2022 Silexon Ltd
+# Copyright (c) 2022 Ruochi Zhang
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
