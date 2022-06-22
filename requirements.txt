@@ -1,0 +1,6 @@
+opencv-python==4.5.4.60
+pandas==1.4.2
+Pillow==9.1.0
+scipy==1.7.3
+tqdm==4.62.3
+matplotlib==3.5.1
