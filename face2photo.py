@@ -50,6 +50,7 @@ from config import Config
 
 from typing import List, Dict, Tuple
 
+
 def worker(anchor_tuple: Tuple) -> Dict:
     """worker of multiprocessing. this function is used to compute similary score of a sub_img with all other images. 
 
@@ -62,11 +63,11 @@ def worker(anchor_tuple: Tuple) -> Dict:
     sim_map = {}
     i, j, anchor_sub = anchor_tuple
 
-    for file in Path(Config.img_lib).glob("*.jpeg"):
+    for file in list(Path(Config.img_lib).glob("*.jpeg")) + list(Path(Config.img_lib).glob("*.jpg")) + list(Path(Config.img_lib).glob("*.png")):
         target_img = cv2.imread(str(file))
         sim_score = classify_hist_with_split(anchor_sub, target_img)
         sim_map[(i, j, str(file))] = sim_score
-        
+
     print("finished... {}, {}".format(i, j))
     return sim_map
 
@@ -88,7 +89,7 @@ def generate_works(anchor_img_path: str, num_row: int, num_column: int) -> List:
     """
     anchor_array = cv2.imread(anchor_img_path)
     height, width = anchor_array.shape[0], anchor_array.shape[1]
-    
+
     sub_height, sub_width = int(height / num_row), int(width / num_column)
 
     work_list = []
@@ -98,25 +99,27 @@ def generate_works(anchor_img_path: str, num_row: int, num_column: int) -> List:
             work_list.append((i_idx, j_idx, anchor_sub))
     return work_list
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
+    
     num_row, num_column = Config.num_row, Config.num_column
     anchor_img_path = Config.anchor_img_path
-    
+
     work_list = generate_works(anchor_img_path, num_row, num_column)
     result_list = []
     cpu_count = int(multiprocessing.cpu_count() * 1)
 
     print("total works: {}".format(len(work_list)))
     print("launch {} processes".format(cpu_count))
-    
+
     pool = Pool(processes=cpu_count)
-    pool.map_async(worker, work_list, callback = log_result)
+    pool.map_async(worker, work_list, callback=log_result)
 
     pool.close()
     pool.join()
-    
+
     # with open("result_map.pkl", "wb") as f:
     #     pkl.dump(result_list, f)
 
-    reconstruct(result_list, block_shape = (num_row, num_column), target_img_path = anchor_img_path, output_path=Config.output_path)
+    reconstruct(result_list, block_shape=(num_row, num_column),
+                target_img_path=anchor_img_path, output_path=Config.output_path)
